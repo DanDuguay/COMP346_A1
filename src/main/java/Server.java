@@ -15,7 +15,7 @@ import java.util.InputMismatchException;
  * @author Kerly Titus
  */
 
-public class Server {
+public class Server extends Thread {
   
 	int numberOfTransactions;         /* Number of transactions handled by the server */
 	int numberOfAccounts;             /* Number of accounts stored in the server */
@@ -128,7 +128,7 @@ public class Server {
         
         try
         {
-         inputStream = new Scanner(new FileInputStream("account.txt"));
+         inputStream = new Scanner(new FileInputStream("src/account.txt"));
         }
         catch(FileNotFoundException e)
         {
@@ -311,9 +311,11 @@ public class Server {
     	long serverStartTime, serverEndTime;
 
     	System.out.println("\n DEBUG : Server.run() - starting server thread " + objNetwork.getServerConnectionStatus());
+        serverStartTime = System.currentTimeMillis();
     	
     	/* Implement the code for the run method */
-        
+        serverEndTime = System.currentTimeMillis();
+        //objNetwork.disconnect(objNetwork.getServerIP());
         System.out.println("\n Terminating server thread - " + " Running time " + (serverEndTime - serverStartTime) + " milliseconds");
            
     }

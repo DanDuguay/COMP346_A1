@@ -15,7 +15,7 @@ import java.util.InputMismatchException;
  * @author Kerly Titus
  */
 
-public class Client { 
+public class Client extends Thread {
     
     private static int numberOfTransactions;   		/* Number of transactions to process */
     private static int maxNbTransactions;      		/* Maximum number of transactions */
@@ -112,7 +112,7 @@ public class Client {
         
         try
         {
-        	inputStream = new Scanner(new FileInputStream("transaction.txt"));
+        	inputStream = new Scanner(new FileInputStream("src/transaction.txt"));
         }
         catch(FileNotFoundException e)
         {
@@ -212,7 +212,25 @@ public class Client {
     {   
     	Transactions transact = new Transactions();
     	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
-    
-    	/* Implement here the code for the run method ... */
+
+        if (clientOperation.equals("sending"))
+        {
+            System.out.println("\n run() called by sending thread.");
+            sendClientStartTime = System.currentTimeMillis();
+            sendTransactions();
+            sendClientEndTime = System.currentTimeMillis();
+        }
+
+        else if (clientOperation.equals("receiving"))
+        {
+            System.out.println("\n run() called by receiving thread.");
+            receiveClientStartTime = System.currentTimeMillis();
+            receiveTransactions(transact);
+            receiveClientEndTime = System.currentTimeMillis();
+            System.out.println("\n Terminating client Receiving thread - " + " Running time " + (receiveClientEndTime - receiveClientStartTime) + " milliseconds");
+            objNetwork.disconnect(objNetwork.getClientIP());
+        }
+
+        /* Implement here the code for the run method ... */
     }
 }

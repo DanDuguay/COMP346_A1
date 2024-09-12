@@ -5,11 +5,13 @@
  * and open the template in the editor.
  */
 
+import java.util.Objects;
+
 /** Network class
  *
  * @author Kerly Titus
  */
-public class Network {
+public class Network extends Thread {
     
     private static int maxNbPackets;                           /* Maximum number of simultaneous transactions handled by the network buffer */
     private static int inputIndexClient, inputIndexServer, outputIndexServer, outputIndexClient;                   /* Network buffer indices for accessing the input buffer (inputIndexClient, outputIndexServer) and output buffer (inputIndexServer, outputIndexClient) */
@@ -554,9 +556,10 @@ public class Network {
     {	
     	System.out.println("\n DEBUG : Network.run() - starting network thread");
     	
-    	while (true)
+    	while (!(Objects.equals(getClientConnectionStatus(), "disconnected")) || !(Objects.equals(getServerConnectionStatus(), "disconnected")))
     	{
 		/* Implement here the code for the run method ... */
+                Thread.yield();
     	}    
     }
 }
