@@ -139,7 +139,7 @@ public class Client extends Thread {
         }
         setNumberOfTransactions(i);		/* Record the number of transactions processed */
         
-        System.out.println("\n DEBUG : Client.readTransactions() - " + getNumberOfTransactions() + " transactions processed");
+        //System.out.println("\n DEBUG : Client.readTransactions() - " + getNumberOfTransactions() + " transactions processed");
         
         inputStream.close( );
 
@@ -156,14 +156,17 @@ public class Client extends Thread {
          int i = 0;     /* index of transaction array */
          
          while (i < getNumberOfTransactions())
-         {  
-            // while( objNetwork.getInBufferStatus().equals("full") );     /* Alternatively, busy-wait until the network input buffer is available */
-            if (objNetwork.getInBufferStatus().equals("full"))
+         {
+             System.out.println("\nSending i: " + i);
+            //while( objNetwork.getInBufferStatus().equals("full") )     /* Alternatively, busy-wait until the network input buffer is available */
+            while(objNetwork.getInBufferStatus().equals("full"))
+            {
                 Thread.yield();
+            }
 
             transaction[i].setTransactionStatus("sent");   /* Set current transaction status */
            
-            System.out.println("\n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
+            //System.out.println("\n DEBUG : Client.sendTransactions() - sending transaction on account " + transaction[i].getAccountNumber());
             
             objNetwork.send(transaction[i]);                            /* Transmit current transaction */
             i++;
@@ -180,12 +183,15 @@ public class Client extends Thread {
      public void receiveTransactions(Transactions transact)
      {
          int i = 0;     /* Index of transaction array */
-         
+         System.out.println("\n numberOfTransactions: " + getNumberOfTransactions());
          while (i < getNumberOfTransactions())
-         {     
-        	 // while( objNetwork.getOutBufferStatus().equals("empty"));  	/* Alternatively, busy-wait until the network output buffer is available */
-             if (objNetwork.getOutBufferStatus().equals("empty"))
-                 Thread.yield();
+         {
+             System.out.println("\nReceiving i: " + i);
+        	 //while(objNetwork.getOutBufferStatus().equals("empty")) 	/* Alternatively, busy-wait until the network output buffer is available */
+            while(objNetwork.getOutBufferStatus().equals("empty"))
+            {
+                Thread.yield();
+            }
 
             objNetwork.receive(transact);                               	/* Receive updated transaction from the network buffer */
             
@@ -217,7 +223,7 @@ public class Client extends Thread {
     	Transactions transact = new Transactions();
     	long sendClientStartTime, sendClientEndTime, receiveClientStartTime, receiveClientEndTime;
 
-        if (clientOperation.equals("sending"))
+        if (getClientOperation().equals("sending"))
         {
             System.out.println("\n run() called by sending thread.");
             sendClientStartTime = System.currentTimeMillis();
@@ -227,7 +233,7 @@ public class Client extends Thread {
 
         }
 
-        else if (clientOperation.equals("receiving"))
+        else if (getClientOperation().equals("receiving"))
         {
             System.out.println("\n run() called by receiving thread.");
             receiveClientStartTime = System.currentTimeMillis();
