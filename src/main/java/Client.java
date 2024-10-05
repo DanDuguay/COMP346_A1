@@ -157,7 +157,6 @@ public class Client extends Thread {
          
          while (i < getNumberOfTransactions())
          {
-             System.out.println("\nSending i: " + i);
             //while( objNetwork.getInBufferStatus().equals("full") )     /* Alternatively, busy-wait until the network input buffer is available */
             while(objNetwork.getInBufferStatus().equals("full"))
             {
@@ -186,7 +185,6 @@ public class Client extends Thread {
          System.out.println("\n numberOfTransactions: " + getNumberOfTransactions());
          while (i < getNumberOfTransactions())
          {
-             System.out.println("\nReceiving i: " + i);
         	 //while(objNetwork.getOutBufferStatus().equals("empty")) 	/* Alternatively, busy-wait until the network output buffer is available */
             while(objNetwork.getOutBufferStatus().equals("empty"))
             {
@@ -195,7 +193,7 @@ public class Client extends Thread {
 
             objNetwork.receive(transact);                               	/* Receive updated transaction from the network buffer */
             
-            System.out.println("\n DEBUG : Client.receiveTransactions() - receiving updated transaction on account " + transact.getAccountNumber());
+            //System.out.println("\n DEBUG : Client.receiveTransactions() - receiving updated transaction on account " + transact.getAccountNumber());
             
             System.out.println(transact);                               	/* Display updated transaction */    
             i++;
